@@ -1,35 +1,26 @@
 import { useState } from 'react'
 
-const Display = (props) => {
+const Statistics = (props) => {
+  const ave = props.average / props.all;
+  const pos = (props.good / props.all) * 100;
   return(
     <>
       <p>good {props.good}</p>
       <p>neutral {props.neutral}</p>
       <p>bad {props.bad}</p>
+      <p>all {props.allVotes}</p>
+      <p>average {ave}</p>
+      <p>positive {pos} %</p>
     </>
   )
 }
+
 const Button = (props) => {
   return(
     <button onClick={props.handleClick}>{props.name}</button>
   )
 }
-const Average = (props) => {
-  const ave = props.average / props.all;
-  return(
-    <>
-    average {ave}
-    </>
-  )
-}
-const Positive = (props) => {
-  const pos = (props.good / props.all) * 100;
-  return(
-    <div>
-    positive {pos} %
-    </div>
-  )
-}
+
 const App = () => {
   // tallenna napit omaan tilaansa
   const [good, setGood] = useState(0)
@@ -59,13 +50,7 @@ const App = () => {
       <Button name="good" handleClick={increaseGood}/>
       <Button name="neutral" handleClick={increaseNeutral}/>
       <Button name="bad" handleClick={increaseBad}/>
-      {/* <Display good={good} neutral={neutral} bad={bad} /> */}
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>all {allVotes}</p>
-      <Average average={average} all={allVotes} />
-      <Positive good={good} all={allVotes} />
+      <Statistics average={average} all={allVotes} good={good} neutral={neutral} bad={bad} />
     </div>
   )
 }
