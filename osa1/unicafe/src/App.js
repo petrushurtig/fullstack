@@ -11,6 +11,7 @@ const Statistics = (props) => {
   return(
     <>
     <table>
+      <tbody>
       <tr>
         <td>good</td>
         <td>{props.stats.good}</td>
@@ -35,6 +36,7 @@ const Statistics = (props) => {
         <td>positive</td>
         <td>{pos}%</td>
       </tr>
+      </tbody>
     </table>
     {/* <StatisticLine text="good" value={props.stats.good} />
     <StatisticLine text="neutral" value={props.stats.neutral} />
