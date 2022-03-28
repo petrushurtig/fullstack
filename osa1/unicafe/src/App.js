@@ -1,29 +1,55 @@
 import { useState } from 'react'
 
 const Statistics = (props) => {
-  const ave = props.average / props.all;
-  const pos = (props.good / props.all) * 100;
-  console.log(props.all);
-  if(props.all === 0) return(<div>
+  const ave = props.stats.average / props.stats.all;
+  const pos = (props.stats.good / props.stats.all) * 100;
+  console.log(props.stats.all);
+  if(props.stats.all === 0) return(<div>
     No feedback given
   </div>)
   
   return(
     <>
-    <StatisticLine text="good" value={props.good} />
-    <StatisticLine text="neutral" value={props.neutral} />
-    <StatisticLine text="bad" value={props.bad} />
-    <StatisticLine text="all" value={props.all} />
+    <table>
+      <tr>
+        <td>good</td>
+        <td>{props.stats.good}</td>
+      </tr>
+      <tr>
+        <td>neutral</td>
+        <td>{props.stats.neutral}</td>
+      </tr>
+      <tr>
+        <td>bad</td>
+        <td>{props.stats.bad}</td>
+      </tr>
+      <tr>
+        <td>all</td>
+        <td>{props.stats.all}</td>
+      </tr>
+      <tr>
+        <td>average</td>
+        <td>{ave}</td>
+      </tr>
+      <tr>
+        <td>positive</td>
+        <td>{pos}%</td>
+      </tr>
+    </table>
+    {/* <StatisticLine text="good" value={props.stats.good} />
+    <StatisticLine text="neutral" value={props.stats.neutral} />
+    <StatisticLine text="bad" value={props.stats.bad} />
+    <StatisticLine text="all" value={props.stats.all} />
     <StatisticLine text="average" value={ave} />
-    <StatisticLine text="positive" value={pos + '%'} />
+    <StatisticLine text="positive" value={pos + '%'} /> */}
     </>
   )
 }
-const StatisticLine = (props) => {
-  return (
-    <p>{props.text} {props.value}</p>
-  )
-}
+// const StatisticLine = (props) => {
+//   return (
+//     <p>{props.text} {props.value}</p>
+//   )
+// }
 const Button = (props) => {
   return(
     <button onClick={props.handleClick}>{props.name}</button>
@@ -31,26 +57,33 @@ const Button = (props) => {
 }
 
 const App = () => {
-  // tallenna napit omaan tilaansa
-  const [good, setGood] = useState(0)
-  const [neutral, setNeutral] = useState(0)
-  const [bad, setBad] = useState(0)
-  const [allVotes, setAllVotes] = useState(0);
-  const [average, setAverage] = useState(0);
+  const [stats, setStats] = useState({good: 0, neutral: 0, bad: 0, all: 0, average: 0});
 
   const increaseGood = () => { 
-    setGood(good +1);
-    setAllVotes(allVotes + 1);
-    setAverage(average +1);
+    const newStats = {
+      ...stats, 
+      good: stats.good +1,
+      all: stats.all +1,
+      average: stats.average +1
+    }
+    setStats(newStats)
   }
   const increaseNeutral = () => {
-    setNeutral(neutral +1);
-    setAllVotes(allVotes + 1);
+    const newStats = {
+      ...stats, 
+      neutral: stats.neutral +1,
+      all: stats.all +1,
+    }
+    setStats(newStats)
   }
   const increaseBad = () => {
-    setBad(bad +1);
-    setAllVotes(allVotes + 1);
-    setAverage(average -1);
+    const newStats = {
+      ...stats, 
+      bad: stats.bad +1,
+      all: stats.all +1,
+      average: stats.average -1
+    }
+    setStats(newStats)
   }
 
   return (
@@ -60,7 +93,7 @@ const App = () => {
       <Button name="neutral" handleClick={increaseNeutral}/>
       <Button name="bad" handleClick={increaseBad}/>
       <h2>Statistics</h2>
-      <Statistics average={average} all={allVotes} good={good} neutral={neutral} bad={bad} />
+      <Statistics stats={stats}/>
     </div>
   )
 }
