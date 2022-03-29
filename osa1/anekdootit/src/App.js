@@ -10,13 +10,10 @@ const App = () => {
     'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when dianosing patients.'
   ]
-   
   const [selected, setSelected] = useState(0)
   const [points, setPoints] = useState(new Array(anecdotes.length+1).join('0').split('').map(parseFloat));
-  const [maxAnecdote, setMaxAnecdote] = useState('');
   const [index, setIndex] = useState();
-  
-  console.log(selected);
+
   const nextAnecdote = () => {
     setSelected(Math.floor(Math.random() * anecdotes.length));
   }
@@ -25,10 +22,6 @@ const App = () => {
     copy[selected] += 1;
     setPoints(copy);
     setIndex(points.indexOf(Math.max(...points)));
-    // setMaxPoints(Math.max(...points));
-    // setIndex(points.indexOf(maxPoints));
-    // console.log(index + " indexi")
-    setMaxAnecdote(anecdotes[index]);
   }
   return (
     <div>
@@ -40,12 +33,10 @@ const App = () => {
         <button onClick={nextAnecdote}>next anecdote</button>
       </div>
       <MostVotes index={index} points={points} anecdotes={anecdotes} />
-      
     </div>
   )
 }
 const MostVotes = (props) => {
-
   return(
     <div>
         <h1>Anecdote with most votes</h1>
@@ -54,5 +45,4 @@ const MostVotes = (props) => {
       </div>
   )
 }
-
 export default App
