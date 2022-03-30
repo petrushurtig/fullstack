@@ -46,8 +46,8 @@ const Course = () => {
     return(
         <div>
             <h1>Web development curriculum</h1>
-            {courses.map((course,i) => 
-                <div>
+            {courses.map((course) => 
+                <div key={course.id}>
                     <Header course={course} />
                     <Content course={course}/>
                     <Total parts={course.parts} />
