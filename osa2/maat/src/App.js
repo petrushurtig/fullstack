@@ -26,6 +26,7 @@ const CountryList = ({searchWord, setSearchWord, countries}) => {
   const [temp, setTemp] = useState();
   const [wind, setWind] = useState();
   const [icon, setIcon] = useState('');
+  
   if(searchWord === '') return <p>Search some countries</p>
   if(list.length > 10) return <p>Too many results</p>
   if(list.length < 1) return <p>No results</p>
@@ -48,7 +49,6 @@ const CountryList = ({searchWord, setSearchWord, countries}) => {
   if(list.length === 1) {
     axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${list[0].name.common}&appid=${process.env.REACT_APP_API_KEY}&units=metric`)
     .then(res => {
-      console.log(res.data.weather[0].icon)
       setIcon(`http://openweathermap.org/img/wn/${res.data.weather[0].icon}@2x.png`)
       setWind(res.data.wind.speed)
       setTemp(res.data.main.temp)
@@ -72,7 +72,5 @@ const CountryList = ({searchWord, setSearchWord, countries}) => {
       </div>
     )
   }
-   
-  
 }
 export default App;
