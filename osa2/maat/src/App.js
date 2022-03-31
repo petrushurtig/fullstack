@@ -17,11 +17,11 @@ const App = () => {
   return(
     <div>
       <input value={searchWord} onChange={(e) => setSearchWord(e.target.value)}/>
-      <CountryList searchWord={searchWord} countries={countries}/>
+      <CountryList setSearchWord={setSearchWord} searchWord={searchWord} countries={countries}/>
     </div>
   )
 }
-const CountryList = ({searchWord, countries}) => {
+const CountryList = ({searchWord, setSearchWord, countries}) => {
   const list = countries.filter(country => country.name.common.match(new RegExp(searchWord, "i")));
   if(searchWord === '') return <p>Search some countries</p>
   if(list.length > 10) return <p>Too many results</p>
@@ -31,7 +31,14 @@ const CountryList = ({searchWord, countries}) => {
     <div>
       {list
         .map(country => 
-         <p key={country.name.common}>{country.name.common}</p>
+        <div>
+         <p 
+          key={country.name.common}
+          >
+              {country.name.common}
+              <button onClick={() => setSearchWord(country.name.common)}>show</button>
+            </p>
+        </div>
         )}
     </div>
   )
