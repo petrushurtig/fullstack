@@ -23,6 +23,9 @@ const App = () => {
 }
 const CountryList = ({searchWord, setSearchWord, countries}) => {
   const list = countries.filter(country => country.name.common.match(new RegExp(searchWord, "i")));
+  const [temp, setTemp] = useState();
+  const [wind, setWind] = useState();
+  const [icon, setIcon] = useState('');
   if(searchWord === '') return <p>Search some countries</p>
   if(list.length > 10) return <p>Too many results</p>
   if(list.length < 1) return <p>No results</p>
@@ -43,7 +46,13 @@ const CountryList = ({searchWord, setSearchWord, countries}) => {
     </div>
   )
   if(list.length === 1) {
-    console.log(list[0]);
+    axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${list[0].name.common}&appid=${process.env.REACT_APP_API_KEY}&units=metric`)
+    .then(res => {
+      console.log(res.data.weather[0].icon)
+      setIcon(`http://openweathermap.org/img/wn/${res.data.weather[0].icon}@2x.png`)
+      setWind(res.data.wind.speed)
+      setTemp(res.data.main.temp)
+    });
     return(
       <div>
         <h2>{list[0].name.common}</h2>
@@ -56,7 +65,10 @@ const CountryList = ({searchWord, setSearchWord, countries}) => {
           ))}
         </ul>
         <img alt='flag' src={list[0].flags.png} height='100px' width='150px' />
-        
+        <h3>Weather in {list[0].name.common}</h3>
+        <p>temperature {temp} Celsius</p>
+        <img alt="icon" src={icon} height={50} width={50}></img>
+        <p>wind {wind} m/s</p>
       </div>
     )
   }
