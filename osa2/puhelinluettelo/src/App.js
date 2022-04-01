@@ -5,14 +5,17 @@ import Persons from './components/Persons'
 import personService from './services/persons';
 import './App.css';
 
-const Notification = ({ message }) => {
+const Notification = ({ message, errMsg }) => {
   if (message === null) {
     return null
   }
   return (
-    <div className='error'>
-      {message}
+    <div>
+     {errMsg
+     ? <div className='error'>{message}</div>
+    : <div className='success'>{message}</div>}
     </div>
+    
   )
 }
 
@@ -22,8 +25,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [searched, setSearched] = useState('');
   const [message, setMessage] = useState(null);
+  const [errMsg, setErrMsg] = useState(false);
 
-  console.log(message)
   useEffect(() => {
     personService
     .getAll()
@@ -48,9 +51,12 @@ const App = () => {
           }, 5000)
         })
         .catch(error => {
-          alert(
-            `person '${person.name}' was already deleted from server`
-          )
+          setErrMsg(true);
+          setMessage(`person '${person.name}' was already deleted from server`)
+          setTimeout(() => {
+            setMessage(null)
+            setErrMsg(false)
+          }, 5000)
           setPersons(persons.filter(p => p.id !== person.id))
         })
       }
@@ -101,7 +107,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message}/>
+      <Notification errMsg={errMsg} message={message}/>
       <Filter searched={searched} handleSearch={handleSearch}/>
       <h2>add a new</h2>
       <PersonForm addPerson={addPerson} newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange}/>
