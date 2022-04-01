@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
-import axios from 'axios';
 import personService from './services/persons';
 
 const App = () => {
@@ -22,7 +21,21 @@ const App = () => {
   const addPerson = (e) => {
     e.preventDefault();
     if(persons.filter(e => e.name === newName).length > 0){
-      window.alert(`${newName} is already added to phonebook`)
+      const person = persons.find(p => p.name === newName)
+      const changedPerson = {...person, number: newNumber}
+      if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
+        personService
+        .update(changedPerson.id, changedPerson)
+        .then(returnedPerson => {
+          setPersons(persons.map(person => person.id !== returnedPerson.id ? person : returnedPerson))
+        })
+        .catch(error => {
+          alert(
+            `person '${person.name}' was already deleted from server`
+          )
+          setPersons(persons.filter(p => p.id !== person.id))
+        })
+      }
     }
     else{
     const personObj = {
@@ -32,7 +45,6 @@ const App = () => {
     personService
     .create(personObj)
     .then(res => {
-      console.log(res);
       setPersons(persons.concat(res));
       setNewName('');
       setNewNumber('');
@@ -40,7 +52,6 @@ const App = () => {
      }
   }
   const deletePerson = (person) => {
-    console.log(person.id);
     const message = `Delete ${person.name}?`;
     if(window.confirm(message)){
       personService
