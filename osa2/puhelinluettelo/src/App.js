@@ -3,13 +3,27 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import personService from './services/persons';
+import './App.css';
+
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+  return (
+    <div className='error'>
+      {message}
+    </div>
+  )
+}
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searched, setSearched] = useState('');
+  const [message, setMessage] = useState(null);
 
+  console.log(message)
   useEffect(() => {
     personService
     .getAll()
@@ -28,6 +42,10 @@ const App = () => {
         .update(changedPerson.id, changedPerson)
         .then(returnedPerson => {
           setPersons(persons.map(person => person.id !== returnedPerson.id ? person : returnedPerson))
+          setMessage(`Number changed successfully for ${returnedPerson.name}`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
         })
         .catch(error => {
           alert(
@@ -46,6 +64,10 @@ const App = () => {
     .create(personObj)
     .then(res => {
       setPersons(persons.concat(res));
+      setMessage(`Added ${personObj.name}`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
       setNewName('');
       setNewNumber('');
     })
@@ -58,6 +80,10 @@ const App = () => {
       .remove(person.id)
       .then(res => {
         setPersons(persons.filter(p => p.id !== person.id))
+        setMessage(`${person.name} deleted`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
       })
       .catch((error) => console.log(error))
     }
@@ -75,6 +101,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message}/>
       <Filter searched={searched} handleSearch={handleSearch}/>
       <h2>add a new</h2>
       <PersonForm addPerson={addPerson} newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange}/>
