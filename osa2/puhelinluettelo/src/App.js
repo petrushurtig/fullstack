@@ -77,6 +77,15 @@ const App = () => {
       setNewName('');
       setNewNumber('');
     })
+    .catch(error => {
+      console.log(error.response.data)
+      setErrMsg(true);
+      setMessage("Name should be min 3 charachters")
+      setTimeout(() => {
+        setMessage(null)
+        setErrMsg(false);
+      }, 5000)
+    })
      }
   }
   const deletePerson = (person) => {
