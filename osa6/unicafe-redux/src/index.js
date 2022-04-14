@@ -42,7 +42,7 @@ const App = () => {
           <>average 0</>
          : 
          <>
-         average {store.getState().average / store.getState().all}
+         average {(store.getState().average / store.getState().all).toFixed(2)}
          </>
         }
         </div>
@@ -51,7 +51,7 @@ const App = () => {
           <>positive 0</>
         :
         <>
-        positive {store.getState().good / store.getState().all} %
+        positive {(store.getState().good / store.getState().all).toFixed(2)} %
         </>
       }
         </div>
