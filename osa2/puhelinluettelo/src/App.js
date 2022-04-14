@@ -80,7 +80,7 @@ const App = () => {
     .catch(error => {
       console.log(error.response.data)
       setErrMsg(true);
-      setMessage("Name should be min 3 charachters")
+      setMessage("Name should be min 3 characters")
       setTimeout(() => {
         setMessage(null)
         setErrMsg(false);
