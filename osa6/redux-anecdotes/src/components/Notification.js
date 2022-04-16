@@ -8,13 +8,13 @@ const Notification = () => {
     padding: 10,
     borderWidth: 1
   }
-  if(notification.content === '' )
+  if(notification === '' )
   return (
     <div style={{padding:10}}></div>
   )
   return (
     <div style={style}>
-      {notification.content}
+      {notification}
     </div>
   )
 }

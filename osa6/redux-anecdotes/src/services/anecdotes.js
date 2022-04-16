@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = 'http://localhost:3001/anecdotes'
+const baseUrl = 'http://localhost:3001/anecdotes/'
 
 const getAll = async () => {
     const res = await axios.get(baseUrl)
@@ -14,4 +14,10 @@ const createNew = async (content) => {
     return res.data
 }
 
-export default { getAll, createNew }
+const addVote = async (anecdote) => {
+    const prevVotes = anecdote.votes
+    const res = await axios.patch(baseUrl + anecdote.id, {votes: prevVotes + 1})
+    return res.data
+}
+
+export default { getAll, createNew, addVote }
