@@ -73,7 +73,7 @@ const Authors = (props) => {
               value={name}
               onChange={({ target }) => setName(target.value)}
             >
-              <option disabled selected value="">
+              <option disabled defaultValue={true} value="">
                 Select an author
               </option>
               {authors.data.allAuthors.map((a) => (

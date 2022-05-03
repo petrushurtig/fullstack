@@ -80,18 +80,24 @@ const resolvers = {
       if (args.author && !args.genre) {
         const author = await Author.findOne({ name: args.author });
         console.log("author id", author._id);
-        return await Book.find({ author: author._id });
+        return await Book.find({ author: author._id }).populate("author", {
+          name: 1,
+          born: 1,
+        });
       }
       if (!args.author && args.genre) {
         console.log("only crime", args.genre);
 
-        return await Book.find({ genres: { $in: args.genre } });
+        return await Book.find({ genres: { $in: args.genre } }).populate(
+          "author",
+          { name: 1, born: 1 }
+        );
       }
       if (args.author && args.genre) {
         const author = await Author.findOne({ name: args.author });
         return await Book.find({
           $and: [{ author: author._id }, { genres: { $in: args.genre } }],
-        });
+        }).populate("author", { name: 1, born: 1 });
       }
     },
     allAuthors: async () => {
@@ -110,23 +116,24 @@ const resolvers = {
         throw new AuthenticationError("not authenticated");
       }
       if (!author) {
-        const author = new Author({
+        const newauthor = new Author({
           name: args.author,
           id: uuid(),
         });
         try {
-          await author.save();
+          await newauthor.save();
         } catch (error) {
           throw new UserInputError(error.message, {
             invalidArgs: args,
           });
         }
       }
-
+      const foundAuthor = await Author.findOne({ name: args.author });
       const book = new Book({
         title: args.title,
         published: args.published,
-        author: author._id,
+        //author: author._id,
+        author: foundAuthor,
         genres: args.genres,
         id: uuid(),
       });
