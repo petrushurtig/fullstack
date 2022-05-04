@@ -10,15 +10,15 @@ const Books = (props) => {
   const books = useQuery(ALL_BOOKS, {
     variables: { genre: selectedGenre },
   });
-  const allBooks = useQuery(ALL_BOOKS);
+  const allBooks = props.books;
 
   useEffect(() => {
     if (!allBooks.loading) {
-      const onlyGenres = allBooks.data.allBooks.map((b) => b.genres);
+      const onlyGenres = allBooks.map((b) => b.genres);
       const flatArray = [...new Set(onlyGenres.flat(1))];
       setGenres(flatArray);
     }
-  }, [allBooks.loading]);
+  }, [allBooks]);
   if (!props.show) {
     return null;
   }
